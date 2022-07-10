@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import rw.ac.rca.nat2022.springboot.frontend.dao.Course;
+import rw.ac.rca.nat2022.springboot.frontend.dao.Student;
 import rw.ac.rca.nat2022.springboot.frontend.utils.ApiResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,38 @@ public class AuthResource {
     @GetMapping("register")
     public String index() {
         return "auth/register";
+    }
+
+    @GetMapping("student")
+    public String studentPage(HttpServletRequest request, Model model) {
+
+        if(request.getSession().getAttribute("token").toString().isEmpty()){
+            return "redirect:/auth/login";
+        }
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+
+        String token = request.getSession().getAttribute("token").toString();
+
+        headers.setBearerAuth(token);
+
+
+        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<Course[]> coursesResponse = restTemplate.exchange(formatURL("/api/courses"), HttpMethod.GET, entity, Course[].class);
+
+        ResponseEntity<Student[]> studentsResponse = restTemplate.exchange(formatURL("/api/students"), HttpMethod.GET, entity, Student[].class);
+        model.addAttribute("courses", Objects.requireNonNull(coursesResponse.getBody()));
+        model.addAttribute("students", Objects.requireNonNull(studentsResponse.getBody()));
+
+//        return "auth/dashboard";
+        return "student/student";
+    }
+
+    @GetMapping("course")
+    public String coursesPage() {
+        return "courses/courses";
     }
 
     @PostMapping("register")
@@ -88,7 +121,6 @@ public class AuthResource {
 
     @GetMapping("/dashboard")
     public String profile(HttpServletRequest request, Model model) {
-
         if(request.getSession().getAttribute("token").toString().isEmpty()){
             return "redirect:/auth/login";
         }
@@ -110,5 +142,11 @@ public class AuthResource {
         model.addAttribute("totalStudents", Objects.requireNonNull(studentsResponse.getBody()).length);
 
         return "auth/dashboard";
+    }
+
+    @GetMapping("logout")
+    public String logout(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "redirect:/auth/login";
     }
 }

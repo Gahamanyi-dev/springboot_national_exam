@@ -12,7 +12,6 @@
     <%@ include file="../components/layout/page-header.jsp" %>
 </head>
 <body>
-<%@ include file="../components/atoms/navbar.jsp" %>
 <div class="container mt-5" style="width: 100%;max-width: 700px">
     <h1 class="text-primary fw-bold">Welcome Back. Login Here</h1>
     <c:if test="${not empty param['registered']}">

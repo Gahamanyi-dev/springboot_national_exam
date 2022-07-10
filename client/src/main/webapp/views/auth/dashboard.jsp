@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: anselme
-  Date: 2022-07-10
-  Time: 19:42
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -22,7 +16,7 @@
         </div>
         <div>
             <div class="card p-5 bg-primary text-white" style="min-height: 150px">
-               <h2>Courses [${totalCourses}]</h2>
+                <h2>Courses [${totalCourses}]</h2>
             </div>
         </div>
     </div>
