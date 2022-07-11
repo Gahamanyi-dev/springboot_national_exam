@@ -2,6 +2,7 @@ package rw.ac.rca.nat2022.springboot.frontend.web.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.catalina.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -107,7 +108,6 @@ public class AuthResource {
             ResponseEntity<ApiResponse> res = restTemplate.postForEntity(formatURL("/api/auth/signin"), requestBody, ApiResponse.class);
 
             request.getSession().setAttribute("token", Objects.requireNonNull(res.getBody()).getMessage());
-
             return "redirect:/auth/dashboard";
 
         } catch (Exception e) {
